@@ -11,9 +11,13 @@ This repository is meant to capture some of these challenges, detail thoughts ar
 ### Goals ###
 
 - Examine a set of interview challenges, each a self-contained project with no co-dependencies. 
+
 - Document each challenge fully, including the problem, solutions, implementations, and any relevant theory or guidance for each.
-- Allow for multiple solutions to each problem, allowing for exploration of different approaches and technology stacks.  
+
+- Allow for multiple solutions to each problem, allowing for exploration of different approaches and technology stacks.
+  
 - Provide a professional level of polish for each implementation, following language idioms and practices.
+
 - Ensure that each implementation is accompanied by the appropriate automated tests, for technology stacks that support it.
 
 ### Structure ###
