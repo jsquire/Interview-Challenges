@@ -22,26 +22,26 @@ This repository is meant to capture some of these challenges, detail thoughts ar
 
 ### Structure ###
 
-* **src**
-  <br />_The container for project source code.  Each challenge will have its own area under this container with its documentation and implementations._
+* **challenges**  
+  _The container for the individual challenges.  Each challenge will have its own area under this container with its documentation and implementations._
 
-* **.editorconfig**
-  <br />_The standardized [editor configuration](https://editorconfig.org/) for defining and maintaining common conventions for code across developers.  This configuration is intended to serve as the default for all implementations and span technology stacks.  In the event that a specific implementation has special needs, a local override will appear in its container._
+* **.editorconfig**  
+  _The standardized [editor configuration](https://editorconfig.org/) for defining and maintaining common conventions for code across developers.  This configuration is intended to serve as the default for all implementations and span technology stacks.  In the event that a specific implementation has special needs, a local override will appear in its container._
   
-* **.gitattributes**
-  <br />_The root configuration for the treatment of assets within the source control system.  This is intended to provide a baseline for each challenge and includes a wide set of languages and technology platforms._
+* **.gitattributes**  
+   _The root configuration for the treatment of assets within the source control system.  This is intended to provide a baseline for each challenge and includes a wide set of languages and technology platforms._
 
-* **.gitignore**
-  <br />_The root configuration for assets that should be ignored by the repository.  This is intended to provide the baseline for each challenge.  As a result, an effort was made to include a wide variety of languages and technology stacks.  In the event that a specific implementation has special needs, a local override will appear in its container._
+* **.gitignore**  
+  _The root configuration for assets that should be ignored by the repository.  This is intended to provide the baseline for each challenge.  As a result, an effort was made to include a wide variety of languages and technology stacks.  In the event that a specific implementation has special needs, a local override will appear in its container._
   
-* **CONDUCT.md**
-  <br />_The code of conduct expected by those contributing and participating in the community of this repository._
+* **CONDUCT.md**  
+  _The code of conduct expected by those contributing and participating in the community of this repository._
   
-* **CONTRIBUTING.md**
-  <br />_The guidelines for contributing to this repository._
+* **CONTRIBUTING.md**  
+  _The guidelines for contributing to this repository._
   
-* **LICENSE.md**
-  <br />_The license applied to the assets and ideas contained in this repository.  In the event that a specific implementation has special needs, a local license will appear in its container._
+* **LICENSE.md**  
+  _The license applied to the assets and ideas contained in this repository.  In the event that a specific implementation has special needs, a local license will appear in its container._
     
 ### Licensing ###
 
