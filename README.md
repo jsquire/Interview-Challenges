@@ -1,6 +1,6 @@
-# Interview Challenges #
+# Interview Challenges
 
-### Overview ###
+### Overview
 
 For a long while, the prevailing mindset when looking to hire technical candidates was that the most effective way to evaluate their problem solving and coding skills was to present programming challenges to be solved on a whiteboard.  To many, this is an alien way to code and is not likely to be a skill used outside of interviewing.  The challenges themselves are often not reflective of the day-to-day technical work and frequently either hearken back to theory taught in college or are designed to require candidates to figure out a specific trick to solve them. 
 
@@ -8,7 +8,7 @@ Throughout the course of my career, I've found myself in this setting a fair num
 
 This repository is meant to capture some of these challenges, detail thoughts around solving them, and implement solutions.  The spirit of the repository is not to offer an interview cheat sheet, but rather to give myself opportunity to revisit things that vexed me, work through them in my own time, and to implement them following good practices rather than whiteboard scratch efforts.  Solutions herein  aren't necessarily the most optimal, or the "textbook" answers that interviewers were looking for, but should indicate a practical approach and a rational thought process behind them.  
 
-### Goals ###
+### Goals
 
 - Examine a set of interview challenges, each a self-contained project with no co-dependencies. 
 
@@ -20,7 +20,7 @@ This repository is meant to capture some of these challenges, detail thoughts ar
 
 - Ensure that each implementation is accompanied by the appropriate automated tests, for technology stacks that support it.
 
-### Structure ###
+### Structure
 
 * **challenges**  
   _The container for the individual challenges.  Each challenge will have its own area under this container with its documentation and implementations._
@@ -43,6 +43,6 @@ This repository is meant to capture some of these challenges, detail thoughts ar
 * **LICENSE.md**  
   _The license applied to the assets and ideas contained in this repository.  In the event that a specific implementation has special needs, a local license will appear in its container._
     
-### Licensing ###
+### Licensing
 
 The artifacts in this repository are offered under the MIT license as described in the accompanying [license](./LICENSE "license") file, unless a local license is present for a specific implementation, in which case the local license takes precedence.  Feel free to use the code in your own projects or the documents as templates as you see fit.  Should these works prove helpful or inspire you to iterate on them in creative ways, I find that to be a huge compliment.  We all build upon the work of those who have come before us.  In general, formal attribution is not necessary, though it is always appreciated.  I do ask, however, that you not copy an item verbatim and pass it off as your own work.  
