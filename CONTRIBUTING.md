@@ -1,4 +1,4 @@
-# Contribution Guidelines #
+# Contribution Guidelines
 
 At present, outside contributions are limited to ideas for new challenges and feedback around bugs and enhancement opportunities.  Please offer any suggestions or problems by opening issues on the repository. 
 
