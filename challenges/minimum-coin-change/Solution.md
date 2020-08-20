@@ -1,4 +1,4 @@
-# The Minimum Coin Change Challenge
+﻿# The Minimum Coin Change Challenge
 
 ### Solutions Overview
 
@@ -40,7 +40,7 @@ We're done.  We were able to make change for $0.63 using `{ 25 cent x 2, 10 cent
 
 **_Complexity_**
 
-Time Complexity: `O(n)`, where `n` is the count of coin denominations in the set that you're making change from.
+Time Complexity: `O(n log n)` to sort the set of denominations + `O(n)` to calculate the answer, where `n` is the count of coin denominations in the set that you're making change from.
 
 **_Special Considerations_**
 
@@ -63,9 +63,11 @@ Though implementations may vary, a good mental model for this is to think about 
 |**1 cent coin** |   -   | 1&#162; x 1<br />3&#162; x 0 | 1&#162; x 2<br />3&#162; x 0 | 1&#162; x 3<br />3&#162; x 0 | 1&#162; x 4<br />3&#162; x 0 |
 |**3 cent coin** |   -   |                -             |                -             | 1&#162; x 0<br />3&#162; x 1 | 1&#162; x 1<br />3&#162; x 1 |    
 
-    * Rows represent a coin denomination
-    * Columns represent the amount of change needed
-    * A dash (-) indicates that change cannot be made of the combination
+```text
+* Rows represent a coin denomination
+* Columns represent the amount of change needed
+* A dash (-) indicates that change cannot be made of the combination
+````
 
 In the above, for the change amount of $0.04 the decision is:
 
@@ -203,7 +205,7 @@ The result is:
 
 **_Complexity_**
 
-Time Complexity: `O(d * a)`, where `d` is the count of coin denominations in the set that you're making change from, and `a` is the count of the amounts of change that need to be calculated.  Because this approach calculates change in increments of 1, starting at 0 and counting up to the desired amount of change, `a` will be the desired `amount + 1`.  For example, change of $0.03 means `a = 4` as answers for $0.00, $0.01, $0.02, and $0.03 need to be calculated.
+Time Complexity: `O(d log d)` to sort the set of denominations + `O(d * a)` to calculate the answer, where `d` is the count of coin denominations in the set that you're making change from, and `a` is the count of the amounts of change that need to be calculated.  Because this approach calculates change in increments of 1, starting at 0 and counting up to the desired amount of change, `a` will be the desired `amount + 1`.  For example, change of $0.03 means `a = 4` as answers for $0.00, $0.01, $0.02, and $0.03 need to be calculated.
 
 **_Special Considerations_**
 
