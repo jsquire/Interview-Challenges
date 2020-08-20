@@ -27,14 +27,13 @@ namespace Squire.MinimumCoinChallenge.Strategies
             }
 
             // The order that calculations are performed is significant because of the relationship between
-            // answers; the denominations should be processed in increasing order.  To make calculations easier,
-            // ensure that there is a denomination of 0 in the set.
+            // answers; the denominations should be processed in increasing order.
             //
             // Because we do not want to mutate the parameter, use LINQ to make a sorted copy rather than
             // Array.Sort which would sort in-place.
 
             denominations = denominations
-                .OrderBy(amount => amount)
+                .OrderBy(denomination => denomination)
                 .ToArray();
 
             // Because solutions for a given value and set of denominations depend on those previously calculated, solutions
@@ -81,7 +80,7 @@ namespace Squire.MinimumCoinChallenge.Strategies
                         continue;
                     }
 
-                    // Calculate the solution using the maximum amount of the current denomination, if the combination is solvable.
+                    // Calculate the solution using the maximum number of the current denomination, if the combination is solvable.
 
                     usedCount = (int)Math.Floor(currentValue / (decimal)currentDenomination);
                     remainingValue = (currentValue - (usedCount * currentDenomination));
@@ -108,7 +107,7 @@ namespace Squire.MinimumCoinChallenge.Strategies
                         currentSolution = new Solution(usedCount, new Dictionary<int, int> {{ currentDenomination, usedCount }});
                     }
 
-                    // If this is the not first denomination calculated, the current solution should be the one that uses the least amount of coins,
+                    // If this is the not first denomination calculated, the current solution should be the one that uses the least number of coins,
                     // choosing between making use of the current denomination or not doing so.  This consideration ensures that local maximums do
                     // not cause an incorrect solution.
 

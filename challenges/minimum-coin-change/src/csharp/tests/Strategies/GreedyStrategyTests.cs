@@ -6,11 +6,11 @@ using Squire.MinimumCoinChallenge.Strategies;
 namespace Squire.MinimumCoinChallenge.Tests
 {
     /// <summary>
-    ///   The suite of tests for the <see cref="DynamicStrategy" /> class.
+    ///   The suite of tests for the <see cref="GreedyStrategy" /> class.
     /// </summary>
     ///
     [TestFixture]
-    public class DynamicStrategyTests
+    public class GreedyStrategyTests
     {
         /// <summary>
         ///   The set of test cases for combinations without a solution.
@@ -82,25 +82,36 @@ namespace Squire.MinimumCoinChallenge.Tests
                     new int[] { 1, 51 },
                     new Dictionary<int, int> {{ 1, 50 }}
                 };
+            }
+        }
 
+        /// <summary>
+        ///   The set of test cases for combinations with a solution that is incorrect
+        ///   due to having local maximums.
+        /// </summary>
+        ///
+        private static IEnumerable<object[]> LocalMaximumCases
+        {
+            get
+            {
                 yield return new object[]
                 {
                     40,
                     new int[] { 1, 20, 10, 5, 25 },
-                    new Dictionary<int, int> {{ 20, 2 }}
+                    new Dictionary<int, int> {{ 5, 1 }, { 10, 1 }, { 25, 1 }}
                 };
 
                 yield return new object[]
                 {
                     41,
                     new int[] { 22, 25, 1, 9, 12 },
-                    new Dictionary<int, int> {{ 1, 1 }, { 9, 2 }, { 22, 1 }}
+                    new Dictionary<int, int> {{ 1, 4 }, { 12, 1 }, { 25, 1 }}
                 };
             }
         }
 
         /// <summary>
-        ///   Verifies behavior of the <see cref="DynamicStrategy.Solve" /> method.
+        ///   Verifies behavior of the <see cref="GreedyStrategy.Solve" /> method.
         /// </summary>
         ///
         [Test]
@@ -109,7 +120,7 @@ namespace Squire.MinimumCoinChallenge.Tests
         [TestCase(-10)]
         public void NoValueProducesNoSolution(int value)
         {
-            var strategy = new DynamicStrategy();
+            var strategy = new GreedyStrategy();
             var result = strategy.Solve(value, new[] { 1, 5, 10, 25 });
 
             Assert.That(result, Is.Not.Null, "The result should have been returned.");
@@ -117,13 +128,13 @@ namespace Squire.MinimumCoinChallenge.Tests
         }
 
         /// <summary>
-        ///   Verifies behavior of the <see cref="DynamicStrategy.Solve" /> method.
+        ///   Verifies behavior of the <see cref="GreedyStrategy.Solve" /> method.
         /// </summary>
         ///
         [Test]
         public void NoDenominationsProduceNoSolution()
         {
-            var strategy = new DynamicStrategy();
+            var strategy = new GreedyStrategy();
             var result = strategy.Solve(1, Array.Empty<int>());
 
             Assert.That(result, Is.Not.Null, "The result should have been returned.");
@@ -131,7 +142,7 @@ namespace Squire.MinimumCoinChallenge.Tests
         }
 
         /// <summary>
-        ///   Verifies behavior of the <see cref="DynamicStrategy.Solve" /> method.
+        ///   Verifies behavior of the <see cref="GreedyStrategy.Solve" /> method.
         /// </summary>
         ///
         [Test]
@@ -139,7 +150,7 @@ namespace Squire.MinimumCoinChallenge.Tests
         public void UnsolvableCombinationsProduceNoSolution(int value,
                                                             int[] denominations)
         {
-            var strategy = new DynamicStrategy();
+            var strategy = new GreedyStrategy();
             var result = strategy.Solve(value, denominations);
 
             Assert.That(result, Is.Not.Null, "The result should have been returned.");
@@ -147,7 +158,7 @@ namespace Squire.MinimumCoinChallenge.Tests
         }
 
         /// <summary>
-        ///   Verifies behavior of the <see cref="DynamicStrategy.Solve" /> method.
+        ///   Verifies behavior of the <see cref="GreedyStrategy.Solve" /> method.
         /// </summary>
         ///
         [Test]
@@ -156,7 +167,24 @@ namespace Squire.MinimumCoinChallenge.Tests
                                                          int[] denominations,
                                                          Dictionary<int, int> expectedResult)
         {
-            var strategy = new DynamicStrategy();
+            var strategy = new GreedyStrategy();
+            var result = strategy.Solve(value, denominations);
+
+            Assert.That(result, Is.Not.Null, "The result should have been returned.");
+            Assert.That(result, Is.EquivalentTo(expectedResult), "The result should have matched the expectation.");
+        }
+
+        /// <summary>
+        ///   Verifies behavior of the <see cref="GreedyStrategy.Solve" /> method.
+        /// </summary>
+        ///
+        [Test]
+        [TestCaseSource(nameof(LocalMaximumCases))]
+        public void LocalMaximumCasesProduceIncorrectSolutions(int value,
+                                                               int[] denominations,
+                                                               Dictionary<int, int> expectedResult)
+        {
+            var strategy = new GreedyStrategy();
             var result = strategy.Solve(value, denominations);
 
             Assert.That(result, Is.Not.Null, "The result should have been returned.");
