@@ -55,9 +55,9 @@ namespace Squire.MinimumCoinChallenge
             {
                 Console.WriteLine("Answer:");
 
-                foreach (var denomination in answer.Keys.OrderBy(item => item))
+                foreach (var coinUse in answer.OrderBy(coinUse => coinUse.Denomination))
                 {
-                    Console.WriteLine($"\t Coin: { denomination } x { answer[denomination] }");
+                    Console.WriteLine($"\t Coin: { coinUse.Denomination } x { coinUse.Count }");
                 }
             }
             else

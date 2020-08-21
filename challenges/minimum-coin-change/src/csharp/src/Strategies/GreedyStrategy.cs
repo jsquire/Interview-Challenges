@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Squire.MinimumCoinChallenge.Strategies
 {
@@ -17,10 +16,10 @@ namespace Squire.MinimumCoinChallenge.Strategies
         public Strategy Strategy => Strategy.Greedy;
 
         /// <inheritdoc/>
-        public Dictionary<int, int> Solve(int value,
-                                          int[] denominations)
+        public IReadOnlyList<CoinUse> Solve(int value,
+                                            int[] denominations)
         {
-            var solution = new Dictionary<int, int>();
+            var solution = new List<CoinUse>(denominations.Length);
 
             // If the value is zero or set of denominations was empty, the challenge cannot be solved.
 
@@ -61,7 +60,7 @@ namespace Squire.MinimumCoinChallenge.Strategies
                 if (usedCount > 0)
                 {
                     value = (value - (usedCount * denomination));
-                    solution.Add(denomination, usedCount);
+                    solution.Add(new CoinUse(denomination, usedCount));
                 }
             }
 
@@ -70,7 +69,7 @@ namespace Squire.MinimumCoinChallenge.Strategies
 
             return (value == 0)
                 ? solution
-                : new Dictionary<int, int>();
+                : new List<CoinUse>();
         }
     }
 }

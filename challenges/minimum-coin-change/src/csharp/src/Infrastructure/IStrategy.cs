@@ -29,7 +29,7 @@ namespace Squire.MinimumCoinChallenge
         ///  validated and, thus, are legal values.
         /// </remarks>
         ///
-        public Dictionary<int, int> Solve(int value,
-                                          int[] denominations);
+        public IReadOnlyList<CoinUse> Solve(int value,
+                                            int[] denominations);
     }
 }
