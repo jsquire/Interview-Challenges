@@ -84,7 +84,7 @@ namespace Squire.MinimumCoinChallenge
         internal static IStrategy CreateStrategy(Strategy strategy) => strategy switch
         {
             Strategy.Dynamic => new DynamicStrategy(),
-            Strategy.Greedy => throw new NotImplementedException(),
+            Strategy.Greedy => new GreedyStrategy(),
             _ => throw new ArgumentException($"Unknown strategy: `{ strategy }`.", nameof(strategy))
         };
 
