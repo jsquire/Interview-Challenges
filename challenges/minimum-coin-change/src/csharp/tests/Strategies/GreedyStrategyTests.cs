@@ -10,7 +10,7 @@ namespace Squire.MinimumCoinChallenge.Tests
     /// </summary>
     ///
     [TestFixture]
-    public class GreedyStrategyTests
+    internal class GreedyStrategyTests
     {
         /// <summary>
         ///   The set of test cases for combinations without a solution.
@@ -38,49 +38,49 @@ namespace Squire.MinimumCoinChallenge.Tests
                 {
                     1,
                     new int[] { 1, 5, 10, 25, 50 },
-                    new Dictionary<int, int> {{ 1, 1 }}
+                    new[] { new CoinUse(1, 1) }
                 };
 
                 yield return new object[]
                 {
                     5,
                     new int[] { 50, 25, 10, 5, 1 },
-                    new Dictionary<int, int> {{ 5, 1 }}
+                    new[] { new CoinUse(5, 1) }
                 };
 
                 yield return new object[]
                 {
                     10,
                     new int[] { 1, 10, 5, 25, 50 },
-                    new Dictionary<int, int> {{ 10, 1 }}
+                    new[] { new CoinUse(10, 1) }
                 };
 
                 yield return new object[]
                 {
                     25,
                     new int[] { 1, 5, 10, 25, 50 },
-                    new Dictionary<int, int> {{ 25, 1 }}
+                    new[] { new CoinUse(25, 1) }
                 };
 
                 yield return new object[]
                 {
                     6,
                     new int[] { 1, 5, 10, 25, 50 },
-                    new Dictionary<int, int> {{ 1, 1 }, { 5, 1 }}
+                    new[] { new CoinUse(1, 1), new CoinUse(5, 1) }
                 };
 
                 yield return new object[]
                 {
                     138,
                     new int[] { 25, 5, 10, 50, 1 },
-                    new Dictionary<int, int> {{ 1, 3 }, { 10, 1 }, {25, 1}, {50, 2}}
+                    new[] { new CoinUse(1, 3), new CoinUse(10, 1), new CoinUse(25, 1), new CoinUse(50, 2) }
                 };
 
                 yield return new object[]
                 {
                     50,
                     new int[] { 1, 51 },
-                    new Dictionary<int, int> {{ 1, 50 }}
+                    new[] { new CoinUse(1, 50) }
                 };
             }
         }
@@ -98,14 +98,14 @@ namespace Squire.MinimumCoinChallenge.Tests
                 {
                     40,
                     new int[] { 1, 20, 10, 5, 25 },
-                    new Dictionary<int, int> {{ 5, 1 }, { 10, 1 }, { 25, 1 }}
+                    new[] { new CoinUse(5, 1), new CoinUse(10, 1), new CoinUse(25, 1) }
                 };
 
                 yield return new object[]
                 {
                     41,
                     new int[] { 22, 25, 1, 9, 12 },
-                    new Dictionary<int, int> {{ 1, 4 }, { 12, 1 }, { 25, 1 }}
+                    new[] { new CoinUse(1, 4), new CoinUse(12, 1), new CoinUse(25, 1) }
                 };
             }
         }
@@ -165,13 +165,13 @@ namespace Squire.MinimumCoinChallenge.Tests
         [TestCaseSource(nameof(SolvableCases))]
         public void SolvableCasesProduceCorrectSolutions(int value,
                                                          int[] denominations,
-                                                         Dictionary<int, int> expectedResult)
+                                                         IReadOnlyList<CoinUse> expectedResult)
         {
             var strategy = new GreedyStrategy();
             var result = strategy.Solve(value, denominations);
 
             Assert.That(result, Is.Not.Null, "The result should have been returned.");
-            Assert.That(result, Is.EquivalentTo(expectedResult), "The result should have matched the expectation.");
+            Assert.That(result.IsEquivalentTo(expectedResult), Is.True, "The result should have matched the expectation.");
         }
 
         /// <summary>
@@ -182,13 +182,13 @@ namespace Squire.MinimumCoinChallenge.Tests
         [TestCaseSource(nameof(LocalMaximumCases))]
         public void LocalMaximumCasesProduceIncorrectSolutions(int value,
                                                                int[] denominations,
-                                                               Dictionary<int, int> expectedResult)
+                                                               IReadOnlyList<CoinUse> expectedResult)
         {
             var strategy = new GreedyStrategy();
             var result = strategy.Solve(value, denominations);
 
             Assert.That(result, Is.Not.Null, "The result should have been returned.");
-            Assert.That(result, Is.EquivalentTo(expectedResult), "The result should have matched the expectation.");
+            Assert.That(result.IsEquivalentTo(expectedResult), Is.True, "The result should have matched the expectation.");
         }
     }
 }

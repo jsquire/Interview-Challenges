@@ -16,14 +16,14 @@ namespace Squire.MinimumCoinChallenge.Strategies
         public Strategy Strategy => Strategy.Dynamic;
 
         /// <inheritdoc/>
-        public Dictionary<int, int> Solve(int value,
-                                          int[] denominations)
+        public IReadOnlyList<CoinUse> Solve(int value,
+                                            int[] denominations)
         {
             // If the value is zero or set of denominations was empty, the challenge cannot be solved.
 
             if ((value <= 0) || (denominations.Length == 0))
             {
-                return new Dictionary<int, int>();
+                return Array.Empty<CoinUse>();
             }
 
             // The order that calculations are performed is significant because of the relationship between
@@ -94,17 +94,17 @@ namespace Squire.MinimumCoinChallenge.Strategies
 
                         if (currentSolution.CoinCount != int.MaxValue)
                         {
-                            currentSolution = new Solution(usedCount + currentSolution.CoinCount, new Dictionary<int, int>(currentSolution.Coins));
+                            currentSolution = new Solution(usedCount + currentSolution.CoinCount, new List<CoinUse>(currentSolution.Coins));
 
                             if (usedCount > 0)
                             {
-                                currentSolution.Coins.Add(currentDenomination, usedCount);
+                                currentSolution.Coins.Add(new CoinUse(currentDenomination, usedCount));
                             }
                         }
                     }
                     else if (remainingValue == 0)
                     {
-                        currentSolution = new Solution(usedCount, new Dictionary<int, int> {{ currentDenomination, usedCount }});
+                        currentSolution = new Solution(usedCount, new List<CoinUse>(denominations.Length) { new CoinUse(currentDenomination, usedCount) });
                     }
 
                     // If this is the not first denomination calculated, the current solution should be the one that uses the least number of coins,
@@ -136,13 +136,13 @@ namespace Squire.MinimumCoinChallenge.Strategies
         private struct Solution
         {
             /// <summary>Represents the answer for an unsolvable combination.</summary>
-            public static readonly Solution Unsolvable = new Solution(int.MaxValue, new Dictionary<int, int>());
+            public static readonly Solution Unsolvable = new Solution(int.MaxValue, new List<CoinUse>(0));
 
             /// <summary>The number of coins in the answer; <see cref="int.MaxValue" /> if there is no valid solution.</summary>
             public readonly int CoinCount;
 
             /// <summary>The used coins dominations and count of each in the answer; <c>null</c> if there is no valid solution.</summary>
-            public readonly Dictionary<int, int> Coins;
+            public readonly List<CoinUse> Coins;
 
             /// <summary>
             ///   Initializes a new instance of the <see cref="Solution" />.
@@ -151,7 +151,7 @@ namespace Squire.MinimumCoinChallenge.Strategies
             /// <param name="coinCount">The number of coins in the answer; <see cref="int.MaxValue" /> if there is no valid solution.</param>
             /// <param name="coins">The used coins dominations and count of each in the answer; <c>null</c> if there is no valid solution.</param>
             ///
-            public Solution(int coinCount, Dictionary<int, int> coins) => (CoinCount, Coins) = (coinCount, coins);
+            public Solution(int coinCount, List<CoinUse> coins) => (CoinCount, Coins) = (coinCount, coins);
         }
     }
 }
