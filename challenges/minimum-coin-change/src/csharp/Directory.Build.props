@@ -2,7 +2,7 @@
   <!-- Project Metadata -->
   <PropertyGroup>
     <Authors>Jesse Squire</Authors>
-    <Copyright>© Jesse Squire All rights reserved.</Copyright>
+    <Copyright>© Jesse Squire. All rights reserved.</Copyright>
     <Product>Mimimum Coin Challenge</Product>
     <RepositoryUrl>https://github.com/jsquire/Interview-Challenges</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
