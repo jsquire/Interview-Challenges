@@ -1,4 +1,4 @@
-﻿# The Minimum Coin Change Challenge
+# The Minimum Coin Change Challenge
 
 ### Solutions Overview
 
