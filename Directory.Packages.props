@@ -1,0 +1,22 @@
+<Project>
+  <PropertyGroup>
+    <!--
+      Enable central package management for all .NET implementations of the challenges.
+      https://learn.microsoft.com/en-us/nuget/consume-packages/Central-Package-Management -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <!-- General Dependencies -->
+  <ItemGroup>
+    <PackageVersion Include="System.CommandLine" Version="2.0.1" />
+  </ItemGroup>
+
+  <!-- Test-Only Dependencies -->
+  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageVersion Include="NSubstitute" Version="5.3.0" />
+    <PackageVersion Include="NUnit" Version="4.4.0" />
+    <PackageVersion Include="NUnit.Analyzers" Version="4.11.2" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="5.2.0" />
+  </ItemGroup>
+</Project>

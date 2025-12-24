@@ -17,7 +17,7 @@ namespace Squire.MinimumCoinChallenge.Tests
         [Test]
         public void MainValidatesTheDenominations()
         {
-            Assert.That(() => EntryPoint.Main(0, null!), Throws.InstanceOf<ArgumentNullException>(), "The set of denominations should not allow null.");
+            Assert.That(() => EntryPoint.Execute(0, null!, Strategy.Dynamic), Throws.InstanceOf<ArgumentNullException>(), "The set of denominations should not allow null.");
         }
 
         /// <summary>
@@ -30,7 +30,20 @@ namespace Squire.MinimumCoinChallenge.Tests
         [TestCase(-32767)]
         public void MainValidatesTheValue(int desiredValue)
         {
-            Assert.That(() => EntryPoint.Main(desiredValue, new[] { 1, 2, 3 }), Throws.InstanceOf<ArgumentOutOfRangeException>(), "The value should be at least zero.");
+            Assert.That(() => EntryPoint.Execute(desiredValue, [ 1, 2, 3 ], Strategy.Dynamic), Throws.InstanceOf<ArgumentOutOfRangeException>(), "The value should be at least zero.");
+        }
+
+        /// <summary>
+        ///   Verifies functionality of the <see cref="EntryPoint.Main" /> method.
+        /// </summary>
+        ///
+        [Test]
+        [TestCase(-1)]
+        [TestCase(-5)]
+        [TestCase(-100)]
+        public void MainValidatesNegativeDenominations(int negativeDenomination)
+        {
+            Assert.That(() => EntryPoint.Execute(10, [ negativeDenomination ], Strategy.Dynamic), Throws.InstanceOf<ArgumentException>(), "Negative denominations should be rejected.");
         }
 
         /// <summary>

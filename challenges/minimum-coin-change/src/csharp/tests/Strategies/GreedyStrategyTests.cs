@@ -146,6 +146,85 @@ namespace Squire.MinimumCoinChallenge.Tests
         /// </summary>
         ///
         [Test]
+        [TestCase(-1)]
+        [TestCase(-5)]
+        [TestCase(-100)]
+        public void NegativeDenominationsProduceNoSolution(int negativeDenomination)
+        {
+            var strategy = new GreedyStrategy();
+            var result = strategy.Solve(10, new[] { negativeDenomination });
+
+            Assert.That(result, Is.Not.Null, "The result should have been returned.");
+            Assert.That(result, Is.Empty, "The result should not contain any denominations.");
+        }
+
+        /// <summary>
+        ///   Verifies behavior of the <see cref="GreedyStrategy.Solve" /> method.
+        /// </summary>
+        ///
+        [Test]
+        public void LargeValueProducesCorrectSolution()
+        {
+            var strategy = new GreedyStrategy();
+            var result = strategy.Solve(1000000, new[] { 1, 5, 10, 25, 50, 100 });
+
+            Assert.That(result, Is.Not.Null, "The result should have been returned.");
+            Assert.That(result, Is.Not.Empty, "The result should contain denominations.");
+
+            var total = 0;
+
+            foreach (var coinUse in result)
+            {
+                total += coinUse.Denomination * coinUse.Count;
+            }
+
+            Assert.That(total, Is.EqualTo(1000000), "The total value of coins should equal the requested value.");
+        }
+
+        /// <summary>
+        ///   Verifies behavior of the <see cref="GreedyStrategy.Solve" /> method.
+        /// </summary>
+        ///
+        [Test]
+        public void DuplicateDenominationsAreTreatedIndependently()
+        {
+            var strategy = new GreedyStrategy();
+            var result = strategy.Solve(30, new[] { 10, 10, 5 });
+
+            Assert.That(result, Is.Not.Null, "The result should have been returned.");
+            Assert.That(result, Is.Not.Empty, "The result should contain denominations.");
+
+            var total = 0;
+
+            foreach (var coinUse in result)
+            {
+                total += coinUse.Denomination * coinUse.Count;
+            }
+
+            Assert.That(total, Is.EqualTo(30), "The total value of coins should equal the requested value.");
+        }
+
+        /// <summary>
+        ///   Verifies behavior of the <see cref="GreedyStrategy.Solve" /> method.
+        /// </summary>
+        ///
+        [Test]
+        public void SingleDenominationExactMatchProducesSolution()
+        {
+            var strategy = new GreedyStrategy();
+            var result = strategy.Solve(25, new[] { 25 });
+
+            Assert.That(result, Is.Not.Null, "The result should have been returned.");
+            Assert.That(result.Count, Is.EqualTo(1), "The result should contain exactly one denomination.");
+            Assert.That(result[0].Denomination, Is.EqualTo(25), "The denomination should be correct.");
+            Assert.That(result[0].Count, Is.EqualTo(1), "The count should be correct.");
+        }
+
+        /// <summary>
+        ///   Verifies behavior of the <see cref="GreedyStrategy.Solve" /> method.
+        /// </summary>
+        ///
+        [Test]
         [TestCaseSource(nameof(UnsolvableCases))]
         public void UnsolvableCombinationsProduceNoSolution(int value,
                                                             int[] denominations)

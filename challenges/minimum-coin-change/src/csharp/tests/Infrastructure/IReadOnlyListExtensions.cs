@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Squire.MinimumCoinChallenge.Tests
 {
@@ -37,8 +35,8 @@ namespace Squire.MinimumCoinChallenge.Tests
                 return false;
             }
 
-            instance = instance.OrderBy(coinUse => coinUse.Denomination).ToList();
-            compareTo = compareTo.OrderBy(coinUse => coinUse.Denomination).ToList();
+            instance = instance.OrderBy(coinUse => coinUse.Denomination).ToArray();
+            compareTo = compareTo.OrderBy(coinUse => coinUse.Denomination).ToArray();
 
             for (var index = 0; index < instance.Count; ++index)
             {

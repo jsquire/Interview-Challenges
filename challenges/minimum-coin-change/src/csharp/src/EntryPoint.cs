@@ -1,4 +1,5 @@
 using System;
+using System.CommandLine;
 using System.Linq;
 using Squire.MinimumCoinChallenge.Strategies;
 
@@ -14,9 +15,7 @@ namespace Squire.MinimumCoinChallenge
         ///   This application demonstrates different approaches to solving the Minimum Coin Change challenge.        ///
         /// </summary>
         ///
-        /// <param name="value">The desired monetary value to calculate change for, specified as a whole number. (example: --value 50)</param>
-        /// <param name="denominations">A space-delimited list of coin denominations available to make change with, each specified as a whole number. (example: --denominations 1 5 10 25)</param>
-        /// <param name="strategy">The <see cref="Strategy"/> to use for calculating change. (example: --strategy Dynamic)</param>
+        //// <param name="args">The command-line arguments.</param>
         ///
         /// <example>
         ///   <c>MinimumCoinChallenge --value 50 --denominations 1 5 10 25 --strategy Greedy</c>
@@ -28,18 +27,75 @@ namespace Squire.MinimumCoinChallenge
         ///
         /// <seealso href="https://github.com/jsquire/Interview-Challenges/blob/master/challenges/minimum-coin-change/ReadMe.md" />
         ///
-        public static void Main(int value,
-                                int[] denominations,
-                                Strategy strategy = Strategy.Dynamic)
+        public static void Main(string[] args)
         {
-            if (denominations == null)
+            var rootCommand = new RootCommand("Demonstrates different approaches to solving the Minimum Coin Change challenge");
+
+            var valueOption = new Option<int>("--value")
             {
-                throw new ArgumentNullException(nameof(denominations));
+                Description = "The desired monetary value to calculate change for, specified as a whole number",
+                Required = true
+            };
+
+            var denominationsOption = new Option<int[]>("--denominations")
+            {
+                Description = "A space-delimited list of coin denominations available to make change with, each specified as a whole number",
+                Required = true,
+                AllowMultipleArgumentsPerToken = true
+            };
+
+            var strategyOption = new Option<Strategy>("--strategy")
+            {
+                Description = "The strategy to use for calculating change",
+                Required = true,
+                DefaultValueFactory = _ => Strategy.Dynamic
+            };
+
+            rootCommand.Options.Add(valueOption);
+            rootCommand.Options.Add(denominationsOption);
+            rootCommand.Options.Add(strategyOption);
+
+            rootCommand.SetAction(parseResult =>
+            {
+                var value = parseResult.GetValue(valueOption);
+                var denominations = parseResult.GetValue(denominationsOption);
+                var strategy = parseResult.GetValue(strategyOption);
+
+                Execute(value, denominations!, strategy);
+            });
+
+            rootCommand
+                .Parse(args)
+                .Invoke();
+        }
+
+        /// <summary>
+        ///   Executes the minimum coin change challenge with the specified parameters.
+        /// </summary>
+        ///
+        /// <param name="value">The desired monetary value to calculate change for.</param>
+        /// <param name="denominations">The coin denominations available to make change with.</param>
+        /// <param name="strategy">The <see cref="Strategy"/> to use for calculating change.</param>
+        ///
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="denominations"/> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="denominations"/> is empty or contains negative values.</exception>"
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="value"/> is negative.</exception>
+        ///
+        internal static void Execute(int value,
+                                     int[] denominations,
+                                     Strategy strategy)
+        {
+            ArgumentNullException.ThrowIfNull(denominations);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(value));
+
+            if (denominations.Length == 0)
+            {
+                throw new ArgumentException("At least one coin denomination must be specified.", nameof(denominations));
             }
 
-            if (value < 0)
+            if (denominations.Any(denomination => denomination <= 0))
             {
-                throw new ArgumentOutOfRangeException(nameof(value), "The value cannot be negative.");
+                throw new ArgumentException("All denominations must be greater than or equal to zero.", nameof(denominations));
             }
 
             Console.WriteLine($"Run starting for the value: { value } using coins [ { String.Join(", ", denominations) } ]...");

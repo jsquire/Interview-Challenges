@@ -1,18 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <IsPackable>false</IsPackable>
+    <TargetFramework>$(CommonTargetFramework)</TargetFramework>
     <RootNamespace>Squire.MinimumCoinChallenge.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="nunit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference  Include="Microsoft.NET.Test.Sdk"/>
+    <PackageReference  Include="NUnit" />
+    <PackageReference  Include="NUnit.Analyzers" />
+    <PackageReference  Include="NUnit3TestAdapter" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\src\MinimumCoinChallenge.csproj" />
   </ItemGroup>
-
 </Project>
