@@ -1,6 +1,6 @@
 # The Minimum Coin Change Challenge
 
-### Solutions Overview
+### Solutions overview
 
 There are two generally accepted approaches to solve this challenge.  Though others exist, those discussed here are those favored for discussion and implementation during interview scenarios.  One employs a greedy strategy, which is fairly straight forward and intuitive but which only works on specific sets of denominations.  Fortunately, one of those sets is American currency - which can help serve as an approachable starting point.
 
@@ -8,7 +8,7 @@ The other approach works as a general case solution at the cost of complexity, t
 
 Each strategy is discussed in more detail below.  Regardless of the strategy used, there are two possible outcomes - either you can make exact change or you cannot.  When it is possible to make change, the result should detail amount of each denomination used.
 
-### The Greedy Approach
+### The greedy approach
 
 **_Steps_**
 
@@ -46,7 +46,7 @@ Time Complexity: `O(n log n)` to sort the set of denominations + `O(n)` to calcu
 
 Unfortunately, the greedy approach only works well for specific sets of coin denominations.  For the general case, it will overvalue the larger denominations and miss the case where a smaller one would result in using less coins used.  To make matters worse, the act of deciding whether a set of denominations can be solved greedily is an NP-complete problem.  Unless you know upfront that it will work with your input, it's best to avoid the greedy approach for this challenge.
 
-### The Dynamic Programming Approach ###
+### The dynamic programming approach
 
 To avoid the pitfalls of the greedy approach, a static formula to decide how many coins of a given denomination to use isn't adequate.  Instead, for each coin denomination, you must consider whether using it or ignoring it results in the lesser amount of coins.  The final answer for a coin denomination is based on this decision.
 
@@ -211,13 +211,13 @@ Time Complexity: `O(d log d)` to sort the set of denominations + `O(d * a)` to c
 
 It is worth noting that if we were to have employed a greedy strategy with the above example, we would end up with an incorrect answer of 3 coins, as there would have been one 6 cent coin and two 1 cent coins selected.  As detailed in the considerations for the greedy approach, it will overvalue the larger denominations and miss the case where a smaller one would result in using less coins.  Since it isn't practical to determine whether or not to use the greedy approach on-the-fly, it is recommended to use the dynamic programming approach whenever you're not already sure that your given set of denominations is appropriate for greedy consideration.
 
-### Other Approaches
+### Other approaches
 
 This challenge can be implemented using a recursive approach, though it is not one of the commonly sought answers to the problem when interviewing, at least not in my experience.  Because the individual calculations repeat frequently, a recursive implementation is encouraged to memoize calculations as they are performed to avoid duplicating effort.  
 
 Because only the needed calculations are made in a recursive approach, it can result in fewer calculations than the the dynamic programming approach which may perform calculations that aren't used in the final answer due to making calculations before they're actually needed.  In practice, however, it is generally accepted that there is little to no performance savings with recursion due to the overhead of the recursive function calls, where the dynamic programming strategy performs calculations inline.   
 
-### Additional Resources
+### Additional resources
 
 - [Change-making problem (Wikipedia)](https://en.wikipedia.org/wiki/Change-making_problem)
 - [Minimum coins to make change (Emery Riddle University)](http://www.mathcs.emory.edu/~cheung/Courses/323/Syllabus/DynProg/money-change.html)
