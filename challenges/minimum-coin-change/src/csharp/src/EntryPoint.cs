@@ -1,6 +1,4 @@
-using System;
 using System.CommandLine;
-using System.Linq;
 using Squire.MinimumCoinChallenge.Strategies;
 
 namespace Squire.MinimumCoinChallenge
@@ -12,7 +10,7 @@ namespace Squire.MinimumCoinChallenge
     public static class EntryPoint
     {
         /// <summary>
-        ///   This application demonstrates different approaches to solving the Minimum Coin Change challenge.        ///
+        ///   This application demonstrates different approaches to solving the Minimum Coin Change challenge.
         /// </summary>
         ///
         //// <param name="args">The command-line arguments.</param>
@@ -25,7 +23,7 @@ namespace Squire.MinimumCoinChallenge
         ///   <c>dotnet run MinimumCoinChallenge --value 50 --denominations 1 5 10 25</c>
         /// </example>
         ///
-        /// <seealso href="https://github.com/jsquire/Interview-Challenges/blob/master/challenges/minimum-coin-change/ReadMe.md" />
+        /// <seealso href="https://github.com/jsquire/Interview-Challenges/blob/main/challenges/minimum-coin-change/README.md" />
         ///
         public static void Main(string[] args)
         {
@@ -78,7 +76,7 @@ namespace Squire.MinimumCoinChallenge
         /// <param name="strategy">The <see cref="Strategy"/> to use for calculating change.</param>
         ///
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="denominations"/> is null.</exception>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="denominations"/> is empty or contains negative values.</exception>"
+        /// <exception cref="ArgumentException">Thrown when <paramref name="denominations"/> is empty or contains negative values.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="value"/> is negative.</exception>
         ///
         internal static void Execute(int value,

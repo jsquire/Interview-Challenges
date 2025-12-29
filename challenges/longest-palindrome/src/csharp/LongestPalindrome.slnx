@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/LongestPalindromeChallenge.csproj" />
+  <Project Path="tests/LongestPalindromeChallenge.Tests.csproj" />
+</Solution>
