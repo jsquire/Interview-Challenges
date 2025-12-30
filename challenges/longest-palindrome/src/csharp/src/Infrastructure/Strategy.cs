@@ -6,9 +6,17 @@ namespace Squire.LongestPalindromeChallenge;
 ///
 public enum Strategy
 {
-    /// <summary>A brute force approach should be applied.</summary>
-    BruteForce,
+    /// <summary>
+    ///   An approach that pre-computes candidate pairs for potential palindromes should be applied.  This is a version
+    ///   of the original inspiration, optimized for greater performance and efficiency.
+    /// </summary>
+    ///
+    CandidatePairsOptimized,
 
-    /// <summary>An approach that pre-computes candidate pairs for potential palindromes should be applied.</summary>
+    /// <summary>
+    ///   An approach that pre-computes candidate pairs for potential palindromes should be applied.  This version is not
+    ///   highly optimized, staying close to the original inspiration for solving the challenge.
+    /// </summary>
+    ///
     CandidatePairs
 }
