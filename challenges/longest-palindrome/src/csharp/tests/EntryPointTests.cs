@@ -7,20 +7,11 @@ namespace Squire.LongestPalindromeChallenge.Tests;
 /// </summary>
 ///
 [TestFixture]
+[NonParallelizable]
 public class EntryPointTests
 {
     /// <summary>
-    ///   Verifies functionality of the <see cref="EntryPoint.Execute" /> method.
-    /// </summary>
-    ///
-    [Test]
-    public void ExecuteValidatesNullValue()
-    {
-        Assert.That(() => EntryPoint.Execute(null, Strategy.BruteForce), Throws.InstanceOf<ArgumentNullException>(), "A null value should not be allowed.");
-    }
-
-    /// <summary>
-    ///   Verifies functionality of the <see cref="EntryPoint.Execute" /> method.
+    ///   Verifies functionality of the <see cref="EntryPoint.Main" /> method.
     /// </summary>
     ///
     [Test]
@@ -29,9 +20,120 @@ public class EntryPointTests
     [TestCase("   ")]
     [TestCase("\t")]
     [TestCase("\n")]
-    public void ExecuteValidatesEmptyOrWhitespaceValue(string value)
+    public void MainRejectsEmptyOrWhitespaceValue(string value)
     {
-        Assert.That(() => EntryPoint.Execute(value, Strategy.BruteForce), Throws.InstanceOf<ArgumentException>(), "An empty or whitespace value should be rejected.");
+        var originalOut = Console.Out;
+        var originalError = Console.Error;
+
+        try
+        {
+            var output = new StringWriter();
+            var error = new StringWriter();
+
+            Console.SetOut(output);
+            Console.SetError(error);
+
+            EntryPoint.Main([value]);
+            Assert.That(error.ToString(), Does.Contain("cannot be null, empty, or whitespace"), "An empty or whitespace value should be rejected.");
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
+        }
+    }
+
+    /// <summary>
+    ///   Verifies functionality of the <see cref="EntryPoint.Main" /> method.
+    /// </summary>
+    ///
+    [Test]
+    [TestCase("a\x00b")]
+    [TestCase("a\x1Fb")]
+    [TestCase("a\x7Fb")]
+    public void MainRejectsControlCharacters(string value)
+    {
+        var originalOut = Console.Out;
+        var originalError = Console.Error;
+
+        try
+        {
+            var output = new StringWriter();
+            var error = new StringWriter();
+
+            Console.SetOut(output);
+            Console.SetError(error);
+
+            EntryPoint.Main([value]);
+            Assert.That(error.ToString(), Does.Contain("ASCII printable characters"), "Control characters should be rejected.");
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
+        }
+    }
+
+    /// <summary>
+    ///   Verifies functionality of the <see cref="EntryPoint.Main" /> method.
+    /// </summary>
+    ///
+    [Test]
+    [TestCase("café")]
+    [TestCase("naïve")]
+    [TestCase("日本語")]
+    public void MainRejectsNonAsciiCharacters(string value)
+    {
+        var originalOut = Console.Out;
+        var originalError = Console.Error;
+
+        try
+        {
+            var output = new StringWriter();
+            var error = new StringWriter();
+
+            Console.SetOut(output);
+            Console.SetError(error);
+
+            EntryPoint.Main([value]);
+            Assert.That(error.ToString(), Does.Contain("ASCII printable characters"), "Non-ASCII characters should be rejected.");
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
+        }
+    }
+
+    /// <summary>
+    ///   Verifies functionality of the <see cref="EntryPoint.Main" /> method.
+    /// </summary>
+    ///
+    [Test]
+    [TestCase(" ~ ")]
+    [TestCase("~a~")]
+    [TestCase(" ")]
+    public void MainAcceptsBoundaryAsciiCharacters(string value)
+    {
+        var originalOut = Console.Out;
+        var originalError = Console.Error;
+
+        try
+        {
+            var output = new StringWriter();
+            var error = new StringWriter();
+
+            Console.SetOut(output);
+            Console.SetError(error);
+
+            EntryPoint.Main([value]);
+            Assert.That(error.ToString(), Does.Not.Contain("ASCII printable characters"), "Boundary ASCII characters should be accepted.");
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
+        }
     }
 
     /// <summary>
@@ -84,7 +186,7 @@ public class EntryPointTests
                 var expectedStrategy = Enum.Parse<Strategy>(strategyName);
                 var implementedStrategy = EntryPoint.CreateStrategy(expectedStrategy);
 
-                Assert.That(implementedStrategy, Is.Not.EqualTo(default(IStrategy)), $"The strategy `{ strategyName }` was not populated.");
+                Assert.That(implementedStrategy, Is.Not.EqualTo(default(StrategyBase)), $"The strategy `{ strategyName }` was not populated.");
                 Assert.That(implementedStrategy.Strategy, Is.EqualTo(expectedStrategy), $"The strategy implementation for `{ strategyName }` does not support the correct strategy.");
             }
             catch (NotImplementedException)

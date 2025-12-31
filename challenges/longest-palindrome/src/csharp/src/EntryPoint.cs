@@ -30,15 +30,37 @@ public static class EntryPoint
 
         var valueArgument = new Argument<string>("value")
         {
-            Description = "The value to calculate the longest palindrome substring for.",
-            Arity = ArgumentArity.ExactlyOne
+            Description = "The string of ASCII printable characters to calculate the longest palindrome substring for.",
+            Arity = ArgumentArity.ExactlyOne,
+            Validators =
+            {
+                result =>
+                {
+                    var value = result.GetValueOrDefault<string>();
+
+                    if (string.IsNullOrWhiteSpace(value))
+                    {
+                        result.AddError("The value cannot be null, empty, or whitespace.");
+                        return;
+                    }
+
+                    foreach (var character in value.AsSpan())
+                    {
+                        if ((!char.IsAscii(character)) || (char.IsControl(character)))
+                        {
+                            result.AddError("The value can only contain ASCII printable characters (code points 32 through 126).");
+                            break;
+                        }
+                    }
+                }
+            }
         };
 
         var strategyOption = new Option<Strategy>("--strategy")
         {
             Description = "The strategy to use for calculating change",
             Required = true,
-            DefaultValueFactory = _ => Strategy.BruteForce
+            DefaultValueFactory = _ => Strategy.CandidatePairsOptimized
         };
 
         rootCommand.Arguments.Add(valueArgument);
@@ -64,8 +86,10 @@ public static class EntryPoint
     /// <param name="value">The <c>string</c> to calculate the longest palindrome substring for.</param>
     /// <param name="strategy">The <see cref="Strategy"/> to use for solving the challenge.</param>
     ///
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
-    /// <exception cref="ArgumentException">Thrown when <paramref name="value"/> is empty or whitespace.</exception>
+    /// <remarks>
+    ///   As an internal construct, it is expected that the parameters have already been
+    ///   validated and, thus, are legal values.
+    /// </remarks>
     ///
     internal static void Execute(string? value,
                                  Strategy strategy)
@@ -103,17 +127,17 @@ public static class EntryPoint
     }
 
     /// <summary>
-    ///   Creates an <see cref="IStrategy" /> which applies the given <paramref name="strategy"/>
+    ///   Creates an <see cref="StrategyBase" /> which applies the given <paramref name="strategy"/>
     ///   to solve the longest palindrome substring problem.
     /// </summary>
     ///
     /// <param name="strategy">The strategy to locate create a solution instance for.</param>
     ///
-    /// <returns>The <see cref="IStrategy" /> for the requested <paramref name="strategy"/>.</returns>
+    /// <returns>The <see cref="StrategyBase" /> for the requested <paramref name="strategy"/>.</returns>
     ///
-    internal static IStrategy CreateStrategy(Strategy strategy) => strategy switch
+    internal static StrategyBase CreateStrategy(Strategy strategy) => strategy switch
     {
-        Strategy.BruteForce => throw new NotImplementedException($"The strategy `{ strategy }` has not been implemented."),
+        Strategy.CandidatePairsOptimized => throw new NotImplementedException($"The strategy `{ strategy }` has not been implemented."),
         Strategy.CandidatePairs => throw new NotImplementedException($"The strategy `{ strategy }` has not been implemented."),
         _ => throw new ArgumentException($"Unknown strategy: `{ strategy }`.", nameof(strategy))
     };
