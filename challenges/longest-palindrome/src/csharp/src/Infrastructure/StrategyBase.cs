@@ -21,7 +21,11 @@ internal abstract class StrategyBase
     ///
     /// <param name="value">The <c>string</c> to calculate the longest palindrome substring for.</param>
     ///
-    /// <returns>The longest palindrome substring found in the <paramref name="value" />; <c>null</c> if no palindrome was found.</returns>
+    /// <returns>
+    ///   The longest palindrome substring found in the <paramref name="value" />; <c>null</c> if no palindrome was found.
+    ///   In the case where multiple palindromes of equal length are found, the one which occurs first in the <paramref name="value" />
+    ///   is returned.
+    /// </returns>
     ///
     /// <remarks>
     ///   As an internal construct, it is expected that the parameters have already been
