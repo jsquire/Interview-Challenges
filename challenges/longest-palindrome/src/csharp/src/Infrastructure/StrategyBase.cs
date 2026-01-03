@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Squire.LongestPalindromeChallenge.Infrastructure;
 
 namespace Squire.LongestPalindromeChallenge;
@@ -35,6 +36,16 @@ internal abstract class StrategyBase
     public abstract Palindrome? Solve(string value);
 
     /// <summary>
+    ///   Calculates the length of the printable ASCII character range, which runs from
+    ///   32 (space) to 126 (~).
+    /// </summary>
+    ///
+    /// <returns>The count of printable ASCII characters.</returns>
+    ///
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    protected static int CalculatePrintableAsciiCount() => ('~' - ' ' + 1);
+
+    /// <summary>
     ///   Determines whether the specified sequence is a palindrome.
     /// </summary>
     ///
@@ -42,7 +53,8 @@ internal abstract class StrategyBase
     ///
     /// <returns><c>true</c> if the specified value is palindrome; otherwise, <c>false</c>.</returns>
     ///
-    protected virtual bool IsPalindrome(ReadOnlySpan<char> value)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    protected static bool IsPalindrome(ReadOnlySpan<char> value)
     {
         // If there are no characters or just one character, it's a palindrome.
 

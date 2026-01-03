@@ -37,10 +37,6 @@ public class StrategyTests
         }
     }
 
-    // ==========================================
-    // Basic Recognition (simple to complex)
-    // ==========================================
-
     /// <summary>
     ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
     /// </summary>
@@ -181,10 +177,6 @@ public class StrategyTests
         }
     }
 
-    // ==========================================
-    // Negative Cases (not palindromes)
-    // ==========================================
-
     /// <summary>
     ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
     /// </summary>
@@ -244,10 +236,6 @@ public class StrategyTests
             Assert.That(result, Is.Null, $"[{ strategy.Strategy }] A repeating pattern with no palindrome should return null.");
         }
     }
-
-    // ==========================================
-    // Embedded Palindromes
-    // ==========================================
 
     /// <summary>
     ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
@@ -315,9 +303,49 @@ public class StrategyTests
         }
     }
 
-    // ==========================================
-    // Selection Logic (multiple candidates)
-    // ==========================================
+    /// <summary>
+    ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
+    /// </summary>
+    ///
+    [Test]
+    public void RepeatingSymbolRunAtEndIsRecognized()
+    {
+        var input = "baaa";
+        var expected = "aaa";
+        var expectedStart = 1;
+
+        foreach (var strategy in ImplementedStrategies())
+        {
+            var result = strategy.Solve(input);
+
+            Assert.That(result, Is.Not.Null, $"[{ strategy.Strategy }] A repeating symbol run at the end should be found.");
+            Assert.That(result.Value, Is.EqualTo(expected), $"[{ strategy.Strategy }] The palindrome value should match.");
+            Assert.That(result.StartIndex, Is.EqualTo(expectedStart), $"[{ strategy.Strategy }] The start index should be { expectedStart }.");
+            Assert.That(result.Length, Is.EqualTo(expected.Length), $"[{ strategy.Strategy }] The length should be { expected.Length }.");
+        }
+    }
+
+    /// <summary>
+    ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
+    /// </summary>
+    ///
+    [Test]
+    public void RepeatingSymbolRunInMiddleIsRecognized()
+    {
+        var input = "baaac";
+        var expected = "aaa";
+        var expectedStart = 1;
+
+        foreach (var strategy in ImplementedStrategies())
+        {
+            var result = strategy.Solve(input);
+
+            Assert.That(result, Is.Not.Null, $"[{ strategy.Strategy }] A repeating symbol run in the middle should be found.");
+            Assert.That(result.Value, Is.EqualTo(expected), $"[{ strategy.Strategy }] The palindrome value should match.");
+            Assert.That(result.StartIndex, Is.EqualTo(expectedStart), $"[{ strategy.Strategy }] The start index should be { expectedStart }.");
+            Assert.That(result.Length, Is.EqualTo(expected.Length), $"[{ strategy.Strategy }] The length should be { expected.Length }.");
+        }
+    }
 
     /// <summary>
     ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
@@ -405,9 +433,121 @@ public class StrategyTests
         }
     }
 
-    // ==========================================
-    // Character Types
-    // ==========================================
+    /// <summary>
+    ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
+    /// </summary>
+    ///
+    [Test]
+    public void RepeatingSymbolRunBeatsEmbeddedPalindrome()
+    {
+        var input = "aaaaaaXaba";
+        var expected = "aaaaaa";
+        var expectedStart = 0;
+
+        foreach (var strategy in ImplementedStrategies())
+        {
+            var result = strategy.Solve(input);
+
+            Assert.That(result, Is.Not.Null, $"[{ strategy.Strategy }] The longer repeating run should be selected.");
+            Assert.That(result.Value, Is.EqualTo(expected), $"[{ strategy.Strategy }] The palindrome value should match the repeating run.");
+            Assert.That(result.StartIndex, Is.EqualTo(expectedStart), $"[{ strategy.Strategy }] The start index should be { expectedStart }.");
+            Assert.That(result.Length, Is.EqualTo(expected.Length), $"[{ strategy.Strategy }] The length should be { expected.Length }.");
+        }
+    }
+
+    /// <summary>
+    ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
+    /// </summary>
+    ///
+    [Test]
+    public void EmbeddedPalindromeBeatsRepeatingRun()
+    {
+        var input = "aaYabcbaZbb";
+        var expected = "abcba";
+        var expectedStart = 3;
+
+        foreach (var strategy in ImplementedStrategies())
+        {
+            var result = strategy.Solve(input);
+
+            Assert.That(result, Is.Not.Null, $"[{ strategy.Strategy }] The longer embedded palindrome should be selected.");
+            Assert.That(result.Value, Is.EqualTo(expected), $"[{ strategy.Strategy }] The palindrome value should match the embedded palindrome.");
+            Assert.That(result.StartIndex, Is.EqualTo(expectedStart), $"[{ strategy.Strategy }] The start index should be { expectedStart }.");
+            Assert.That(result.Length, Is.EqualTo(expected.Length), $"[{ strategy.Strategy }] The length should be { expected.Length }.");
+        }
+    }
+
+    /// <summary>
+    ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
+    /// </summary>
+    ///
+    [Test]
+    public void MultipleRepeatingRunsSelectsLongest()
+    {
+        var input = "aaYbbbZcc";
+        var expected = "bbb";
+        var expectedStart = 3;
+
+        foreach (var strategy in ImplementedStrategies())
+        {
+            var result = strategy.Solve(input);
+
+            Assert.That(result, Is.Not.Null, $"[{ strategy.Strategy }] The longest repeating run should be selected.");
+            Assert.That(result.Value, Is.EqualTo(expected), $"[{ strategy.Strategy }] The palindrome value should match the longest run.");
+            Assert.That(result.StartIndex, Is.EqualTo(expectedStart), $"[{ strategy.Strategy }] The start index should be { expectedStart }.");
+            Assert.That(result.Length, Is.EqualTo(expected.Length), $"[{ strategy.Strategy }] The length should be { expected.Length }.");
+        }
+    }
+
+    /// <summary>
+    ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
+    /// </summary>
+    ///
+    [Test]
+    public void RepeatingRunAtStartBeatsLaterCandidate()
+    {
+        var input = "aaaXcbc";
+        var expected = "aaa";
+        var expectedStart = 0;
+
+        foreach (var strategy in ImplementedStrategies())
+        {
+            var result = strategy.Solve(input);
+
+            Assert.That(result, Is.Not.Null, $"[{ strategy.Strategy }] The longer repeating run at start should be selected.");
+            Assert.That(result.Value, Is.EqualTo(expected), $"[{ strategy.Strategy }] The palindrome value should match the run at start.");
+            Assert.That(result.StartIndex, Is.EqualTo(expectedStart), $"[{ strategy.Strategy }] The start index should be { expectedStart }.");
+            Assert.That(result.Length, Is.EqualTo(expected.Length), $"[{ strategy.Strategy }] The length should be { expected.Length }.");
+        }
+    }
+
+    /// <summary>
+    ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
+    /// </summary>
+    ///
+    /// <remarks>
+    ///   This test exercises a scenario where multiple repeating runs are superseded
+    ///   by a longer candidate palindrome that spans across the runs and non-run characters.
+    ///   It stresses the interaction between run tracking and candidate pair expansion.
+    /// </remarks>
+    ///
+    [Test]
+    public void CandidateSpanningMultipleRunsIsRecognized()
+    {
+        var input = "XYZaaWbbbWaaX";
+        var expected = "aaWbbbWaa";
+        var expectedStart = 3;
+
+        foreach (var strategy in ImplementedStrategies())
+        {
+            var result = strategy.Solve(input);
+
+            Assert.That(result, Is.Not.Null, $"[{ strategy.Strategy }] A candidate spanning multiple runs should be found.");
+            Assert.That(result.Value, Is.EqualTo(expected), $"[{ strategy.Strategy }] The palindrome value should match the spanning candidate.");
+            Assert.That(result.StartIndex, Is.EqualTo(expectedStart), $"[{ strategy.Strategy }] The start index should be { expectedStart }.");
+            Assert.That(result.Length, Is.EqualTo(expected.Length), $"[{ strategy.Strategy }] The length should be { expected.Length }.");
+        }
+    }
 
     /// <summary>
     ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
@@ -464,10 +604,6 @@ public class StrategyTests
         }
     }
 
-    // ==========================================
-    // Scale
-    // ==========================================
-
     /// <summary>
     ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
     /// </summary>
@@ -486,6 +622,88 @@ public class StrategyTests
             Assert.That(result.Value, Is.EqualTo(input), $"[{ strategy.Strategy }] The palindrome value should be the full string.");
             Assert.That(result.StartIndex, Is.EqualTo(0), $"[{ strategy.Strategy }] The start index should be 0.");
             Assert.That(result.Length, Is.EqualTo(101), $"[{ strategy.Strategy }] The length should be 101.");
+        }
+    }
+
+    /// <summary>
+    ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
+    /// </summary>
+    ///
+    /// <remarks>
+    ///   This test targets a specific scenario where a palindrome spans from an early
+    ///   character occurrence to a later run of the same character. The candidate pair
+    ///   expansion must correctly calculate the length using the earlier position, not
+    ///   the start of the run.
+    ///
+    ///   Input: "aXXXXXaaa"
+    ///   - 'a' at position 0
+    ///   - 'X' run at positions 1-5 (length 5)
+    ///   - 'a' run at positions 6-8 (length 3)
+    ///
+    ///   The longest palindrome is "aXXXXXa" (positions 0-6, length 7), formed by
+    ///   pairing the 'a' at position 0 with the 'a' at position 6.
+    /// </remarks>
+    ///
+    [Test]
+    public void PalindromeSpanningEarlyCharacterToLaterRunIsFound()
+    {
+        var input = "aXXXXXaaa";
+        var expected = "aXXXXXa";
+        var expectedStart = 0;
+
+        foreach (var strategy in ImplementedStrategies())
+        {
+            var result = strategy.Solve(input);
+
+            Assert.That(result, Is.Not.Null, $"[{ strategy.Strategy }] A palindrome spanning an early char to a later run should be found.");
+            Assert.That(result.Value, Is.EqualTo(expected), $"[{ strategy.Strategy }] The palindrome value should match.");
+            Assert.That(result.StartIndex, Is.EqualTo(expectedStart), $"[{ strategy.Strategy }] The start index should be { expectedStart }.");
+            Assert.That(result.Length, Is.EqualTo(expected.Length), $"[{ strategy.Strategy }] The length should be { expected.Length }.");
+        }
+    }
+
+    /// <summary>
+    ///   Verifies functionality of the <see cref="StrategyBase.Solve" /> method.
+    /// </summary>
+    ///
+    /// <remarks>
+    ///   This test targets a bug in ExpandPairs where the candidate length was calculated
+    ///   using the run's start index instead of the earlier position being paired with.
+    ///
+    ///   Input: "zXXbbbXX"
+    ///   - 'z' at 0
+    ///   - 'XX' at 1-2 (length 2, becomes longestPalindrome initially)
+    ///   - 'bbb' at 3-5 (length 3, becomes new longestPalindrome)
+    ///   - 'XX' at 6-7 (length 2, expanded via ExpandPairs at end)
+    ///
+    ///   The full string "zXXbbbXX" is NOT a palindrome, so early-exit doesn't trigger.
+    ///
+    ///   The pair (1, 7) forms "XXbbbXX" (length 7), a valid palindrome.
+    ///   - At index 6: 'X' seen before at [1, 2], creates (1, 6) len 6, (2, 6) len 5
+    ///   - At index 7: extends run, deferred to ExpandPairs
+    ///   - ExpandPairs for (X, 6, 2): positions = [1, 2, 6, 7]
+    ///     - index=7: (1, 7) should have length 7
+    ///     - Bug calculates: 7 - 6 + 1 = 2 (wrong, filtered out)
+    ///     - Correct: 7 - 1 + 1 = 7 (should be enqueued)
+    ///
+    ///   So (1, 7) is only creatable via ExpandPairs, and the bug would miss it.
+    /// </remarks>
+    ///
+    [Test]
+    public void ExpandPairsCalculatesLengthFromPositionNotRunStart()
+    {
+        var input = "zXXbbbXX";
+        var expected = "XXbbbXX";
+        var expectedStart = 1;
+
+        foreach (var strategy in ImplementedStrategies())
+        {
+            var result = strategy.Solve(input);
+
+            Assert.That(result, Is.Not.Null, $"[{ strategy.Strategy }] A palindrome with runs at both ends should be found.");
+            Assert.That(result.Value, Is.EqualTo(expected), $"[{ strategy.Strategy }] The palindrome value should match.");
+            Assert.That(result.StartIndex, Is.EqualTo(expectedStart), $"[{ strategy.Strategy }] The start index should be { expectedStart }.");
+            Assert.That(result.Length, Is.EqualTo(expected.Length), $"[{ strategy.Strategy }] The length should be { expected.Length }.");
         }
     }
 }

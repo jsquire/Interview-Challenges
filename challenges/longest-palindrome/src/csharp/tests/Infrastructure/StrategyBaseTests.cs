@@ -11,7 +11,7 @@ namespace Squire.LongestPalindromeChallenge.Tests.Infrastructure;
 public class StrategyBaseTests
 {
     /// <summary>The strategy implementation to use for testing default implementations.</summary>
-    private readonly TestableStrategy TestStrategy = new TestableStrategy();
+    private readonly TestableStrategy TestStrategy = new();
 
     /// <summary>
     ///   Verifies behavior of the <see cref="StrategyBase.IsPalindrome" /> method.
@@ -215,6 +215,6 @@ public class StrategyBaseTests
         ///
         /// <returns><c>true</c> if the specified value is palindrome; otherwise, <c>false</c>.</returns>
         ///
-        public new bool IsPalindrome(ReadOnlySpan<char> value) => base.IsPalindrome(value);
+        public new bool IsPalindrome(ReadOnlySpan<char> value) => StrategyBase.IsPalindrome(value);
     }
 }

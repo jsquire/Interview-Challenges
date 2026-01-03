@@ -19,7 +19,7 @@ internal class CandidatePairsStrategy : StrategyBase
             return new Palindrome(value, 0, 1);
         }
 
-        var letters = new Dictionary<char, List<int>>(95);
+        var symbols = new Dictionary<char, List<int>>(CalculatePrintableAsciiCount());
         var rawCandidates = new List<CandidatePair>();
         var valueSpan = value.AsSpan();
 
@@ -33,10 +33,10 @@ internal class CandidatePairsStrategy : StrategyBase
             // If this symbol hasn't been previously seen, add it to the dictionary.  Since there
             // can be only one occurrence, we know this is not a candidate pair.
 
-            if (!letters.TryGetValue(symbol, out var positions))
+            if (!symbols.TryGetValue(symbol, out var positions))
             {
                 positions = new List<int>();
-                letters[symbol] = positions;
+                symbols[symbol] = positions;
 
                 positions.Add(index);
             }
