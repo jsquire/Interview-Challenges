@@ -1,4 +1,5 @@
 using System.CommandLine;
+using Squire.LongestPalindromeChallenge.Strategies;
 
 namespace Squire.LongestPalindromeChallenge;
 
@@ -137,8 +138,8 @@ public static class EntryPoint
     ///
     internal static StrategyBase CreateStrategy(Strategy strategy) => strategy switch
     {
-        Strategy.CandidatePairsOptimized => throw new NotImplementedException($"The strategy `{ strategy }` has not been implemented."),
-        Strategy.CandidatePairs => throw new NotImplementedException($"The strategy `{ strategy }` has not been implemented."),
+        Strategy.CandidatePairsOptimized => new CandidatePairsOptimizedStrategy(),
+        Strategy.CandidatePairs => new CandidatePairsStrategy(),
         _ => throw new ArgumentException($"Unknown strategy: `{ strategy }`.", nameof(strategy))
     };
 }
