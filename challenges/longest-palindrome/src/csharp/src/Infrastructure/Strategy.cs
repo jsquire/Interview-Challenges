@@ -18,5 +18,12 @@ public enum Strategy
     ///   highly optimized, staying close to the original inspiration for solving the challenge.
     /// </summary>
     ///
-    CandidatePairs
+    CandidatePairs,
+
+    /// <summary>
+    ///   An approach that expands around the center point of all potential palindromes should be applied.  This is a well-known
+    ///   algorithm which balances performance and complexity.
+    /// </summary>
+    ///
+    ExpandAroundCenter
 }

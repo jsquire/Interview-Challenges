@@ -140,6 +140,7 @@ public static class EntryPoint
     {
         Strategy.CandidatePairsOptimized => new CandidatePairsOptimizedStrategy(),
         Strategy.CandidatePairs => new CandidatePairsStrategy(),
+        Strategy.ExpandAroundCenter => new ExpandAroundCenterStrategy(),
         _ => throw new ArgumentException($"Unknown strategy: `{ strategy }`.", nameof(strategy))
     };
 }

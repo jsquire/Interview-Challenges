@@ -3,6 +3,13 @@ using Squire.LongestPalindromeChallenge.Infrastructure;
 
 namespace Squire.LongestPalindromeChallenge.Strategies;
 
+/// <summary>
+///   An approach that pre-computes candidate pairs for potential palindromes should be applied.  This version is not
+///   optimized, staying close to the original inspiration for solving the challenge.
+/// </summary>
+///
+/// <seealso cref="Squire.LongestPalindromeChallenge.StrategyBase" />
+///
 internal class CandidatePairsStrategy : StrategyBase
 {
     /// <inheritdoc />
