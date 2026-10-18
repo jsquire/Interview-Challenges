@@ -1,0 +1,29 @@
+version: 2
+updates:
+  - package-ecosystem: nuget
+    directory: /
+    labels:
+      - dependencies
+    schedule:
+      interval: weekly
+    groups:
+      compatible-updates:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    directory: /
+    labels:
+      - dependencies
+    schedule:
+      interval: weekly
+    groups:
+      compatible-updates:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch

@@ -25,6 +25,12 @@ This repository is meant to capture some of these challenges, detail thoughts ar
 * **challenges**  
   _The container for the individual challenges.  Each challenge will have its own area under this container with its documentation and implementations._
 
+* **AGENTS.md**  
+  _The instructions for AI agents working in this repository, covering the working agreement, the analyzer policy, and the skills to load for a given task._
+
+* **.agents/skills**  
+  _The repository skills that agents load when their scope matches the task, such as C# conventions, documentation, and testing._
+
 * **.editorconfig**  
   _The standardized [editor configuration](https://editorconfig.org/) for defining and maintaining common conventions for code across developers.  This configuration is intended to serve as the default for all implementations and span technology stacks.  In the event that a specific implementation has special needs, a local override will appear in its container._
 

@@ -1,0 +1,9 @@
+<Project>
+  <Import Project="..\..\..\..\Directory.Build.props" />
+
+  <PropertyGroup>
+    <Product>Conway's Game of Life Challenge</Product>
+    <Version>0.0.1-dev.1</Version>
+    <InformationalVersion>$(Version)</InformationalVersion>
+  </PropertyGroup>
+</Project>
