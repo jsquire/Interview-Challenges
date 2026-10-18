@@ -1,0 +1,38 @@
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    These are repository-wide defaults.  Any value here can be overridden for a
+    specific project by setting it in that project's local Directory.Build.props.
+  -->
+
+  <!-- Project Metadata -->
+  <PropertyGroup>
+    <Authors>Jesse Squire</Authors>
+    <Copyright>© Jesse Squire. All rights reserved.</Copyright>
+    <RepositoryUrl>https://github.com/jsquire/Interview-Challenges</RepositoryUrl>
+    <NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+
+  <!-- Configuration -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <SignAssembly>false</SignAssembly>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>10.0-recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <NuGetAudit>true</NuGetAudit>
+    <NuGetAuditMode>all</NuGetAuditMode>
+    <NuGetAuditLevel>low</NuGetAuditLevel>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);NU1900;NU1901;NU1902;NU1903;NU1904</WarningsNotAsErrors>
+    <WarningsAsErrors Condition="'$(GITHUB_ACTIONS)' == 'true'">$(WarningsAsErrors);NU1903;NU1904</WarningsAsErrors>
+  </PropertyGroup>
+
+  <!-- Custom Properties -->
+  <PropertyGroup>
+    <CommonTargetFramework>net10.0</CommonTargetFramework>
+  </PropertyGroup>
+</Project>

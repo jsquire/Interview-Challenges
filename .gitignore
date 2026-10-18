@@ -39,7 +39,7 @@ project.lock.json
 
 /.ionide
 /packages
-/TestResults
+TestResults/
 
 /tools/NuGet.exe
 /App_Data

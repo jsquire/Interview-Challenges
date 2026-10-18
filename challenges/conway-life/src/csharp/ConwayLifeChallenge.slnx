@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/ConwayLifeChallenge.csproj" />
+  <Project Path="tests/ConwayLifeChallenge.Tests.csproj" />
+</Solution>
