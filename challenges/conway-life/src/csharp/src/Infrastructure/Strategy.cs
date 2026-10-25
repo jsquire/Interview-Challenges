@@ -10,5 +10,5 @@ public enum Strategy
     ///   An intuitive approach should be applied, staying close to the original inspiration for solving the challenge.
     /// </summary>
     ///
-    Naive
+    ActiveRegion
 }

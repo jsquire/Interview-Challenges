@@ -41,7 +41,7 @@ internal abstract class StrategyBase
     ///
     internal static StrategyBase CreateStrategy(Strategy strategy) => strategy switch
     {
-        Strategy.Naive => new NaiveStrategy(),
+        Strategy.ActiveRegion => new ActiveRegionStrategy(),
         _ => throw new ArgumentException($"Unknown strategy: `{ strategy }`.", nameof(strategy))
     };
 }

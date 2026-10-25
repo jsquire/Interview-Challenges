@@ -26,7 +26,7 @@ public static class EntryPoint
     /// </example>
     ///
     /// <example>
-    ///   <c>ConwayLifeChallenge --file glider.lif --generations 10 --strategy Naive</c>
+    ///   <c>ConwayLifeChallenge --file glider.lif --generations 10 --strategy ActiveRegion</c>
     /// </example>
     ///
     /// <example>
@@ -66,7 +66,7 @@ public static class EntryPoint
         {
             Description = "The strategy to use for simulating the generations.",
             Required = true,
-            DefaultValueFactory = _ => Strategy.Naive
+            DefaultValueFactory = _ => Strategy.ActiveRegion
         };
 
         rootCommand.Options.Add(fileOption);
