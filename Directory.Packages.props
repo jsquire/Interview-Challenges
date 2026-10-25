@@ -11,6 +11,11 @@
     <PackageVersion Include="System.CommandLine" Version="2.0.13" />
   </ItemGroup>
 
+  <!-- Benchmark-Only Dependencies -->
+  <ItemGroup Condition="'$(IsBenchmarkProject)' == 'true'">
+    <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
+  </ItemGroup>
+
   <!-- Test-Only Dependencies -->
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />

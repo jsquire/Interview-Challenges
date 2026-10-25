@@ -14,10 +14,10 @@ namespace Squire.ConwayLifeChallenge.Strategies;
 ///
 /// <seealso cref="Squire.ConwayLifeChallenge.StrategyBase" />
 ///
-internal class NaiveStrategy : StrategyBase
+internal class ActiveRegionStrategy : StrategyBase
 {
     /// <inheritdoc />
-    public override Strategy Strategy => Strategy.Naive;
+    public override Strategy Strategy => Strategy.ActiveRegion;
 
     /// <inheritdoc />
     public override HashSet<Coordinate> Simulate(HashSet<Coordinate> cells,
@@ -123,8 +123,6 @@ internal class NaiveStrategy : StrategyBase
     ///   if determined to be alive.  Otherwise, they will be added to <paramref name="generationVisitedCells"/>.
     /// </remarks>
     ///
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-
     private static void ProcessCell(Coordinate cell,
                                     HashSet<Coordinate> startingAliveCells,
                                     HashSet<Coordinate> endingAliveCells,

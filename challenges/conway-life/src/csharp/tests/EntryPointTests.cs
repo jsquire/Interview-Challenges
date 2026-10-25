@@ -286,7 +286,7 @@ public class EntryPointTests
             Console.SetIn(input);
             Console.SetOut(output);
 
-            Assert.That(() => EntryPoint.Execute(null, generations, Strategy.Naive),
+            Assert.That(() => EntryPoint.Execute(null, generations, Strategy.ActiveRegion),
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("generations"),
                 "Direct execution should reject generation counts outside the supported range.");
             Assert.That(output.ToString(), Is.Empty, "Validation should precede prompting.");
@@ -342,7 +342,7 @@ public class EntryPointTests
     /// </summary>
     ///
     [Test]
-    public void MainAcceptsNaiveStrategyAndReadsInput()
+    public void MainAcceptsActiveRegionStrategyAndReadsInput()
     {
         var originalIn = Console.In;
         var originalOut = Console.Out;
@@ -358,9 +358,9 @@ public class EntryPointTests
             Console.SetOut(output);
             Console.SetError(error);
 
-            EntryPoint.Main([ "--strategy", "Naive" ]);
+            EntryPoint.Main([ "--strategy", "ActiveRegion" ]);
 
-            Assert.That(output.ToString(), Does.Contain("Enter live cell coordinates"), "The naive strategy option should reach input processing.");
+            Assert.That(output.ToString(), Does.Contain("Enter live cell coordinates"), "The active region strategy option should reach input processing.");
             Assert.That(error.ToString(), Does.Contain("Invalid coordinate: invalid"), "Malformed input should fail after accepting the strategy.");
         }
         finally

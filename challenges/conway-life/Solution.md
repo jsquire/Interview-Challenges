@@ -6,7 +6,7 @@ The full signed 64-bit coordinate space is too large to store or process as a gr
 
 Any solution must identify the cells that need consideration while keeping each generation based on the completed state of the previous one.  It must also handle coordinates at the signed 64-bit limits without allowing arithmetic to wrap across the board.  How the population is represented and how repeated work is avoided determine much of the cost, with trade-offs between execution time, memory use, and implementation complexity.
 
-### The initial approach
+### The initial approach _(Active Region strategy)_
 
 In the spirit of the exercise, this approach was conceptualized by exploring the problem space and approaching it intuitively as a candidate would do in a whiteboard setting.  No research into prior art, common algorithms, nor the work of others was done.
 
