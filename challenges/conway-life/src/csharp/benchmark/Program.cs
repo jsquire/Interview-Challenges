@@ -20,6 +20,12 @@ public static class Program
             return;
         }
 
+        if (args.Length > 0 && args[0] == "--unified-path")
+        {
+            _ = BenchmarkRunner.Run<UnifiedPathBenchmarks>();
+            return;
+        }
+
         _ = BenchmarkRunner.Run<DensityAnalysisBenchmarks>();
     }
 }
