@@ -4,7 +4,7 @@
 
 This project holds the benchmark suite for the Conway's Game of Life challenge.  Each entry in the suite is a measurement we made to answer a specific question with data, and the findings are recorded here as design input for how the solution evolves.
 
-The benchmarks support our iteration on efficiency.  We pick a question, design benchmarks that answer it, run them, and write down what the data shows.  Findings here are evidence for design decisions, not decoration.  Strategies used only by the benchmarks, such as `NoVisitedSetStrategy` and `DensityGatedStrategy`, live in this project and are never selected by `StrategyBase.CreateStrategy`.
+The benchmarks support our iteration on efficiency.  We pick a question, design benchmarks that answer it, run them, and write down what the data shows.  Findings here are evidence for design decisions, not decoration.  Strategies used only by the benchmarks, such as `NoVisitedSetStrategy`, `DensityGatedStrategy`, `UnifiedPathStrategy`, and `InlinedUnifiedStrategy`, live in this project and are never selected by `StrategyBase.CreateStrategy`.
 
 ### How an analysis is structured
 
@@ -69,6 +69,36 @@ The crossover is between 15% and 20% density.  Below it the visited set does not
 
 **Design issue the data surfaced.**  The gated approach allocates the visited set eagerly, even when it is not used.  For the sparse workload it allocates 62,024 B while the never-use approach allocates 31,024 B.  The extra 31,000 B is the visited set, and the same gap appears in the mixed workload.  The strategy allocates the set once at the start of the simulation and clears it at the end of each generation, so when the density is below the threshold the set is allocated but never used.  This is a cost that lazy allocation, only when first needed, would avoid.  It does not change the timing results, because the allocation is a one-time cost amortized across the generations, but it does change the allocation numbers.
 
+#### Split paths or a single nullable path
+
+**Question.**  The `ActiveRegionOptimizedStrategy` runs the generation methods in a split form, one dedicated method per path, with the with-visited-set and without-visited-set paths sharing no code.  A single method with a nullable visited set parameter would remove the duplication.  In the generations that do not use the set, though, a null check would be paid at every cell and neighbor.  Does the deduplication cost anything measurable, and if it does, can aggressive inlining recover it?
+
+**What was measured.**  `UnifiedPathBenchmarks` compares three strategies that are algorithmically identical, including the density gate and the lazy allocation of the visited set.  The only difference is the structure of the generation methods.  `ActiveRegionOptimizedStrategy` is the split form, `UnifiedPathStrategy` is the single-pass form that carries the visited set as a nullable parameter, and `InlinedUnifiedStrategy` is that same single-pass form with its generation methods marked aggressive inline.  If the single-pass cost is the cost of separate methods, the inlined form should close the gap toward the split form.  If it is the cost of the null check, the inlined form lands next to the non-inlined form, because a null check can't be inlined away.  The sparse, mixed, dense, and R-pentomino workloads are each simulated for thirty generations, measuring time and allocations.
+
+**The data.**
+
+| Workload | Split form | Single-pass form | Single-pass, inlined |
+|---|---|---|---|
+| Sparse (0.025%, 30 gen) | 762,000 ns | 793,600 ns | 796,900 ns |
+| Mixed (10%, 30 gen) | 6,159,000 ns | 6,244,300 ns | 6,213,200 ns |
+| Dense (82%, 30 gen) | 1,912,800 ns | 1,943,900 ns | 1,940,500 ns |
+| R-pentomino (30 gen) | 269,000 ns | 279,400 ns | 272,900 ns |
+
+Both single-pass forms are slower than the split form in every workload.  Against the split form, the deltas are 4.1% and 4.6% sparse, 1.4% and 0.9% mixed, 1.6% and 1.4% dense, and 3.9% and 1.4% R-pentomino.  Between the two single-pass forms, the deltas are 0.4%, 0.5%, 0.2%, and 2.3% on the same workloads, all inside their error bands.  In the sparse workload, inlining made the single-pass form slightly worse.
+
+Allocations are identical for all three forms in every workload.  60.57 KB sparse, 60.57 KB mixed, 90.84 KB dense, 13.13 KB R-pentomino.
+
+**Findings.**
+
+- The split form wins in every workload.  The single-pass forms are 0.9% to 4.6% slower.
+- Aggressive inlining does not recover the cost.  The inlined and non-inlined forms sit next to each other, within their error bands in every workload, and both sit 0.9% to 4.6% behind the split form.
+- That is the signature of a branch, not a call.  The deduplication trades a duplicated method body for a null check at every cell and neighbor, and the null check is what the split form pays the least of.  Inlining changes the call overhead, which is not where the cost lives.
+- The largest deltas are on the two workloads where the gate is off for most of the run, sparse and R-pentomino.  That is where the null check is paid at every cell and neighbor with the set never used.
+- The single-pass forms win nothing in allocations.  The deduplication has no offsetting benefit and only a time cost.
+- No free form of the deduplication exists in the data.  The cost is the null check, and every structure that carries the visited set as an optional parameter pays it.
+
+**Decision.**  Keep the split form.  The deduplication removes a duplicated method body to add a null check at roughly four times as many call sites, and aggressive inlining does not recover the cost, so there is no version of the deduplication that costs nothing.  The duplication is deliberate, and the `ActiveRegionOptimizedStrategy` documents that.  If the maintenance case ever outweighs the 1 to 5% cost, the single-pass form is already measured and waiting in this project.
+
 ### Running the benchmarks
 
 From the `benchmark` directory:
@@ -81,6 +111,13 @@ To run a single case, filter by name:
 
 ```shell
 dotnet run -c Release -- --filter "DensityAnalysisBenchmarks.GatedSparse"
+```
+
+To run one analysis, pass its flag:
+
+```shell
+dotnet run -c Release -- --evolution
+dotnet run -c Release -- --unified-path
 ```
 
 ### Notes

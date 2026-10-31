@@ -133,7 +133,7 @@ internal class ActiveRegionStrategy : StrategyBase
         // depth to 1.  If the depth is above that or the cell has already been visited or
         // ruled alive for the generation, skip it.
 
-        if ((depth > 1)            
+        if ((depth > 1)
             || (generationVisitedCells.Contains(cell))
             || (endingAliveCells.Contains(cell)))
         {

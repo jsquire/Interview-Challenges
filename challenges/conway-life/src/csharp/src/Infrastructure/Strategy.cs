@@ -10,5 +10,12 @@ public enum Strategy
     ///   An intuitive approach should be applied, staying close to the original inspiration for solving the challenge.
     /// </summary>
     ///
-    ActiveRegion
+    ActiveRegion,
+
+    /// <summary>
+    ///   An intuitive approach should be applied, optimized for greater performance and efficiency.  This is a
+    ///   version of the original inspiration, optimized based on the data from the challenge's benchmarking.
+    /// </summary>
+    ///
+    ActiveRegionOptimized
 }

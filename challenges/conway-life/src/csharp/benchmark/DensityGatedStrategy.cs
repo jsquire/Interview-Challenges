@@ -139,7 +139,6 @@ internal sealed class DensityGatedStrategy : StrategyBase
         }
 
         var liveNeighbors = 0;
-
         ++depth;
 
         foreach (var neighborCell in cell.GetNeighbors())
@@ -185,7 +184,6 @@ internal sealed class DensityGatedStrategy : StrategyBase
         }
 
         var liveNeighbors = 0;
-
         ++depth;
 
         foreach (var neighborCell in cell.GetNeighbors())

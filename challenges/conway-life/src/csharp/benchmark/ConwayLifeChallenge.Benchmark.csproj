@@ -5,6 +5,7 @@
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
     <IsBenchmarkProject>true</IsBenchmarkProject>
+    <StartupObject>Squire.ConwayLifeChallenge.Benchmark.EntryPoint</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

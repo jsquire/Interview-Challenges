@@ -69,6 +69,30 @@ Population growth increases both the work and storage required.  The working set
 
 The processing rate and memory allowance in the [problem-space discussion](./README.md#problem-space) are planning estimates.  They are not measured throughput or peak-memory results for this implementation.
 
+### The optimized active region approach
+
+**_Concept_**
+
+This approach builds on the active region strategy.  The benchmarking analysis of the initial approach found that the value of the per-generation visited set depends on the density of the population.  Below a crossover between 15% and 20% density the visited set does not help, and at 15% density it is slightly slower than not using it.  Above the crossover the benefit grows with density, measuring 11% faster at 25% and 22.5% faster at 35%.
+
+The optimized strategy therefore computes the density of the population at the start of each generation and uses the visited set only when the density is at or above a threshold of 25%.  The density is the population size divided by the area of its bounding box, a single pass over the live cells.  That check measured under 0.1% of a generation's cost in every case, so it is cheap enough to pay for on every generation.  The full analysis, including the per-density and per-workload data, is in the [benchmark area](./src/csharp/benchmark/README.md#density-and-the-per-generation-visited-set).
+
+**_Optimizations_**
+
+- **Density-gated visited set**: Each generation picks its own path.  Populations at or above the 25% threshold use the visited set, and those below it skip it.  The gated approach measured within 3.4% of the best of always-use or never-use in every workload, and it is on the winning side in every workload.
+
+- **Lazy allocated visited set**: The visited set is allocated on the first generation that uses it, not up front.  Benchmarking surfaced that eager allocation paid about 31,000 bytes even in workloads that never used the set, so the allocation only happens when the set earns its cost.
+
+- **Split generation paths**: The generation methods keep a dedicated path for the visited set and one for not, instead of a single path with a nullable visited set.  That duplication is deliberate.  Benchmarking the three forms found the single-pass form 0.9% to 4.6% slower with identical allocations, and aggressive inlining of the single-pass methods did not recover the difference.  The full analysis, including the inlining probe, is in the [benchmark area](./src/csharp/benchmark/README.md#split-paths-or-a-single-nullable-path).
+
+**_Complexity_**
+
+Expected time complexity is `O(g * n)` per generation for a nonempty simulation, the same as the initial approach, with an additional `O(n)` density pass per generation.  Space complexity is `O(n)` for the population sets and visited candidates.  With zero generations, copying the input takes `O(n)` time and space.
+
+**_Practical Performance_**
+
+The strategy keeps the active region strengths while dropping the work that does not pay off.  For the 82% density workload it matches the always-use behavior, which measured 53,696.06 ns against 138,056.70 ns for the never-use behavior.  For the sparse workload it matches the never-use behavior, which measured 748,564.00 ns against 999,270.61 ns for the always-use behavior, and it allocates 31,024 B where the always-use behavior allocates 546,533 B.  The cost of that choice is the per-generation density pass and, at most, one generation on the other path when a population crosses the threshold mid-simulation.
+
 ### Other approaches
 
 Hashlife is a more advanced algorithm used by modern programs such as Golly.  It represents patterns as a tree structure, which allows it to simulate very large patterns efficiently.  It is a candidate for the efficiency iteration.

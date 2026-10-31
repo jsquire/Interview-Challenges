@@ -96,7 +96,6 @@ internal sealed class NoVisitedSetStrategy : StrategyBase
         }
 
         var liveNeighbors = 0;
-
         ++depth;
 
         foreach (var neighborCell in cell.GetNeighbors())

@@ -167,6 +167,7 @@ public class PerGenerationBenchmarks
         {
             var x = random.Next(-half, half);
             var y = random.Next(-half, half);
+
             _ = cells.Add(new Coordinate(x, y));
         }
 

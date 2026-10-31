@@ -192,6 +192,7 @@ public class DensityAnalysisBenchmarks
         {
             var x = random.Next(-half, half);
             var y = random.Next(-half, half);
+
             _ = cells.Add(new Coordinate(x, y));
         }
 
