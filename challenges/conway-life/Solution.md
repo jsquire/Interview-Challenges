@@ -95,10 +95,53 @@ The strategy keeps the active region strengths while dropping the work that does
 
 ### Other approaches
 
-Hashlife is a more advanced algorithm used by modern programs such as Golly.  It represents patterns as a tree structure, which allows it to simulate very large patterns efficiently.  It is a candidate for the efficiency iteration.
+**_Bit-parallel row encoding_**
+
+This well-known, moderate-complexity improvement was considered as an alternate implementation.  Instead of a set of coordinates, each row of the board is stored as machine integers with one bit per cell, and a cell is alive when that bit is set.  Neighbor counting then becomes shifts and bit-wise additions across a whole row, and the rule evaluation compresses into two mask operations that apply to all 64 columns at once.  That keeps the approach within a self-contained single strategy class, which is the constraint this challenge already imposes.
+
+The cost of an approach follows from what its representation stores.  The active region approach stores the live cells, and its cost tracks that count, which the constraints bound.  Bit-parallel stores the board's rectangle, and its cost tracks that bounding box whether it is populated or not.  The constraints cap the live cell count at 10,000 and the generation count at 30, but they allow coordinates to fall anywhere in the signed 64-bit range, so the bounding box contains the entire possible universe.
+
+For a compact, dense pattern, a 100 by 100 block of 10,000 cells, the comparison favors the bit-parallel approach.
+
+| Measure | Bit-parallel | Active region |
+| --- | --- | --- |
+| Live cells | 10,000 | 10,000 |
+| Memory per generation | 100 by 100 = 10,000 bits, about 1.2 KB | 10,000 cells times 28 B, about 280 KB |
+| Work per generation | about 200 word operations, with a fixed number of operations per word | 10,000 cells times 8 = 80,000 neighbor lookups |
+
+For a sparse, wide pattern, the same logic inverts.  The bounding box is set by the outermost live cell on each axis, not by their count.  Ten thousand cells on ten thousand distinct columns can span nearly the full width of the signed 64-bit range.
+
+| Measure | Bit-parallel | Active region |
+| --- | --- | --- |
+| Live cells | 10,000 | 10,000 |
+| Bounding box width | up to 2^64 columns, about 1.8 x 10^19 | - |
+| Memory per generation | one spread row alone, about 2.3 x 10^18 B, roughly 2.3 EB | 10,000 cells times 28 B, about 280 KB |
+| Memory budget | about 5 GB | about 5 GB |
+| Work per generation | touches every column of the bounding box | 10,000 cells times 8 |
+
+Even the sample input in the problem statement spreads its 8 live cells across about 2 trillion columns.  One bit-parallel row across that span is about 250 GB, 50 times the 5 GB budget, and the full bounding box is orders of magnitude larger still.  The upper bound is the 2^128 full coordinate space that the problem space section already rejects as infeasible.
+
+The decision is not a matter of speed, but size.  In the compact, dense case the bit-parallel approach is markedly faster and smaller.  The active region approach cannot produce a worst case that breaks the budget, because it stores only the live cells and the constraints bound those.  The bit-parallel approach can, because it stores the whole rectangle and the constraints do not bound it.  Valid inputs that fit the rules exceed the memory and time budgets by orders of magnitude, and that worst case is a property of the representation, not of an unlucky input.  On that basis the approach was not implemented.
+
+**_HashLife_**
+
+HashLife is a more advanced algorithm used by modern programs such as Golly.  It decomposes a pattern into a tree structure with hash consing and reuses the computed results of unchanged regions, which lets it simulate very large patterns efficiently.
+
+It carries significantly more implementation complexity than the active region approach.  It needs its own tree, hash consing, memoization, and a dedicated garbage collector, and it performs much more poorly on high-entropy patterns.  Because the active region approach already fits within the budget for this challenge, that extra machinery offers no benefit.
+
+**_QuickLife_**
+
+QuickLife is the conventional, non-hashing algorithm used by Golly.  It is the fallback Golly's documentation recommends when patterns are too chaotic for HashLife.  Its cost tracks the live cell population rather than the bounding box.
+
+The active region approach scales with the live cell population already, and it avoids reevaluating dead cells on a dense board.  A conventional per-cell algorithm such as QuickLife offers no benefit for this challenge on that basis.
 
 ### Additional resources
 
 - [Conway's Game of Life (Wikipedia)](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
 - [Life 1.06 format (LifeWiki)](https://conwaylife.com/wiki/Life_1.06)
 - [.NET HashSet implementation](https://github.com/dotnet/runtime/blob/v10.0.0/src/libraries/System.Private.CoreLib/src/System/Collections/Generic/HashSet.cs)
+- [Bit-Packed Conway's Game of Life in GLSL](https://salivity.github.io/glsl/article/bit-packed-conway-s-game-of-life-in-glsl)
+- [HashLife (Wikipedia)](https://en.wikipedia.org/wiki/HashLife)
+- [Golly, HashLife algorithm](https://golly.sourceforge.io/Help/Algorithms/HashLife.html)
+- [Golly, QuickLife algorithm](https://golly.sourceforge.io/Help/Algorithms/QuickLife.html)
+- [Golly, bounded grids](https://golly.sourceforge.io/Help/bounded.html)
