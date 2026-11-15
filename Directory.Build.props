@@ -33,6 +33,6 @@
 
   <!-- Custom Properties -->
   <PropertyGroup>
-    <CommonTargetFramework>net10.0</CommonTargetFramework>
+    <CommonTargetFramework>net11.0</CommonTargetFramework>
   </PropertyGroup>
 </Project>
